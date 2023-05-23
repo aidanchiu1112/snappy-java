@@ -149,7 +149,7 @@ native: jni-header snappy-header $(NATIVE_DLL)
 native-nocmake: jni-header $(NATIVE_DLL)
 snappy: native $(TARGET)/$(snappy-jar-version).jar
 
-native-all: native native-arm mac64 win32 win64 win-armv7 win-aarch64 linux32 linux64 linux-ppc64le linux-riscv64 linux-s390x
+native-all: native native-arm mac64 win32 win64 linux32 linux64 linux-ppc64le linux-riscv64 linux-s390x
 
 $(NATIVE_DLL): $(SNAPPY_OUT)/$(LIBNAME)
 	@mkdir -p $(@D)
@@ -173,12 +173,6 @@ win32: jni-header
 win64: jni-header
 	./docker/dockcross-windows-x64 -a $(DOCKER_RUN_OPTS) bash -c 'make clean-native snappy-header native CROSS_PREFIX=x86_64-w64-mingw32.static- OS_NAME=Windows OS_ARCH=x86_64 SNAPPY_CMAKE_OPTS="-DHAVE_SYS_UIO_H=0"'
 
-win-armv7: jni-header
-	./docker/dockcross-windows-armv7 -a $(DOCKER_RUN_OPTS) bash -c 'make clean-native snappy-header native CROSS_PREFIX=armv7-w64-mingw32- OS_NAME=Windows OS_ARCH=armv7 SNAPPY_CMAKE_OPTS="-DHAVE_SYS_UIO_H=0"'
-
-win-aarch64: jni-header
-	./docker/dockcross-windows-arm64 -a $(DOCKER_RUN_OPTS) bash -c 'make clean-native snappy-header native CROSS_PREFIX=aarch64-w64-mingw32- OS_NAME=Windows OS_ARCH=aarch64 SNAPPY_CMAKE_OPTS="-DHAVE_SYS_UIO_H=0"'
-
 # deprecated
 mac32: jni-header
 	$(MAKE) native OS_NAME=Mac OS_ARCH=x86
@@ -196,7 +190,13 @@ freebsd64:
 	$(MAKE) native OS_NAME=FreeBSD OS_ARCH=x86_64
 
 # For ARM
-native-arm: linux-arm64 linux-android-arm linux-arm linux-armv6 linux-armv7
+native-arm: win-armv7 win-aarch64 linux-arm64 linux-android-arm linux-arm linux-armv6 linux-armv7
+
+win-armv7: jni-header
+	./docker/dockcross-windows-armv7 -a $(DOCKER_RUN_OPTS) bash -c 'make clean-native snappy-header native CROSS_PREFIX=armv7-w64-mingw32- OS_NAME=Windows OS_ARCH=armv7 SNAPPY_CMAKE_OPTS="-DHAVE_SYS_UIO_H=0"'
+
+win-aarch64: jni-header
+	./docker/dockcross-windows-arm64 -a $(DOCKER_RUN_OPTS) bash -c 'make clean-native snappy-header native CROSS_PREFIX=aarch64-w64-mingw32- OS_NAME=Windows OS_ARCH=aarch64 SNAPPY_CMAKE_OPTS="-DHAVE_SYS_UIO_H=0"'
 
 linux-arm: jni-header
 	./docker/dockcross-armv5 -a $(DOCKER_RUN_OPTS) bash -c 'make clean-native native CROSS_PREFIX=/usr/xcc/armv5-unknown-linux-gnueabi/bin//armv5-unknown-linux-gnueabi- OS_NAME=Linux OS_ARCH=arm'
