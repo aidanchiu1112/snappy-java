@@ -149,7 +149,7 @@ native: jni-header snappy-header $(NATIVE_DLL)
 native-nocmake: jni-header $(NATIVE_DLL)
 snappy: native $(TARGET)/$(snappy-jar-version).jar
 
-native-all: native native-arm mac64 win32 win64 win-armv7 win-arm64 linux32 linux64 linux-ppc64le linux-riscv64 linux-s390x
+native-all: native native-arm mac64 win32 win64 win-armv7 win-aarch64 linux32 linux64 linux-ppc64le linux-riscv64 linux-s390x
 
 $(NATIVE_DLL): $(SNAPPY_OUT)/$(LIBNAME)
 	@mkdir -p $(@D)
