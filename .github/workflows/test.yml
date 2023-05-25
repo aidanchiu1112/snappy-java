@@ -7,14 +7,19 @@ on:
       - '**.java'
       - '**.sbt'
       - '.github/workflows/*.yml'
+      - '**.so'
+      - '**.dll'
+      - 'src/main/resources/**'
   push:
     branches:
       - master
+      - main
     paths:
       - '**.scala'
       - '**.java'
       - '**.sbt'
       - '.github/workflows/*.yml'
+      - 'src/main/resources/org/xerial/snappy/**'
 
 jobs:
   code_format:
